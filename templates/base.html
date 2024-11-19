@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kitchen Garden{% endblock %}</title>
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">Kitchen Garden</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item {% if request.path == '/seeds-supplies/' %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'product_list' %}?category=all">Seeds & Supplies</a>
+                        </li>
+                        <li class="nav-item {% if request.path == '/articles/' %}active{% endif %}">
+                            <a class="nav-link" href="#">Articles</a> 
+                        </li>
+                        <li class="nav-item {% if request.path == '/contact/' %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Welcome, {{ user.username }}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'account_email' %}">Change Email</a>
+                                    <a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a>
+                                    <a class="dropdown-item" href="#">Orders</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'cart_view' %}">
+                                    <i class="fas fa-shopping-cart"></i> Cart
+                                    <span class="badge badge-primary">{{ request.user.cartitem_set.count }}</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer class="bg-light text-center py-4 mt-4">
+        <p>&copy; 2024 Kitchen Garden. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#" class="btn btn-primary btn-sm mx-1"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="btn btn-info btn-sm mx-1"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="btn btn-danger btn-sm mx-1"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>

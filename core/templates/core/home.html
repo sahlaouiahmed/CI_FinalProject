@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Kitchen Garden{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Background Image -->
+<div class="hero-section text-center text-white py-5" id="hero" style="background-image: url('{% static 'images/cover.jpg' %}'); background-size: cover; background-position: center;">
+    <div class="container">
+        <h1 class="display-4 animate__animated animate__fadeInDown">Welcome to Kitchen Garden</h1>
+        <p class="lead animate__animated animate__fadeInUp">Your one-stop shop for all your kitchen gardening needs!</p>
+        <hr class="my-4">
+        <p class="animate__animated animate__fadeInUp">Discover a variety of seeds, supplies, and expert advice to make your kitchen garden thrive.</p>
+        <a class="btn btn-light btn-lg animate__animated animate__fadeInUp" href="{% url 'product_list' %}?category=all" role="button">Shop Now</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row mb-4 text-center">
+        <div class="col">
+            <h2>Our Products</h2>
+            <p class="text-muted">Quality seeds and supplies for every gardener</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <div class="mb-3">
+                        <i class="fas fa-seedling fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title">Seeds</h5>
+                    <p class="card-text">Start your garden with our premium seeds.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'product_list' %}?category=seed" class="btn btn-outline-success">Shop Seeds</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <div class="mb-3">
+                        <i class="fas fa-tools fa-3x text-warning"></i>
+                    </div>
+                    <h5 class="card-title">Supplies</h5>
+                    <p class="card-text">Everything you need for your garden.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'product_list' %}?category=supply" class="btn btn-outline-warning">Shop Supplies</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <div class="mb-3">
+                        <i class="fas fa-book fa-3x text-info"></i>
+                    </div>
+                    <h5 class="card-title">Gardening Tips</h5>
+                    <p class="card-text">Expert advice for every gardener.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-outline-info">Read Tips</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5 mb-4 text-center">
+        <div class="col">
+            <h2>Why Choose Us</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <div class="mb-3">
+                        <i class="fas fa-credit-card fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title">Secure Payments</h5>
+                    <p class="card-text">Fast and secure payment options.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <div class="mb-3">
+                        <i class="fas fa-shipping-fast fa-3x text-danger"></i>
+                    </div>
+                    <h5 class="card-title">Free Shipping & Returns</h5>
+                    <p class="card-text">Enjoy free shipping and hassle-free returns.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                <div class="card-body flex-grow-1">
+                    <div class="mb-3">
+                        <i class="fas fa-headset fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title">24/7 Customer Service</h5>
+                    <p class="card-text">We're here to help, anytime.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
