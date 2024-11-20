@@ -1,3 +1,7 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
 html, body { height: 100%; }
 body { display: flex; flex-direction: column; } 
 main { flex: 1; } 
@@ -33,3 +37,4 @@ footer { flex-shrink: 0; }
     background-color: #1e7e34;
     color: white;
 }
+.custom-input-group .form-control { margin-right: 10px; }

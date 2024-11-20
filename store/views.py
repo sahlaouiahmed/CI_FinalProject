@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, CartItem
+from django.contrib import messages
+
 
 def product_list(request):
     category = request.GET.get('category', 'all')  # Default to 'all' if no category is provided
@@ -34,23 +36,28 @@ def add_to_cart(request, product_id):
         product.save()
     return redirect('product_list')
 
+
 @login_required
 def cart_view(request):
     cart_items = CartItem.objects.filter(user=request.user)
     return render(request, 'store/cart.html', {'cart_items': cart_items})
 
-
 @login_required
 def update_cart(request, item_id):
-    cart_item = CartItem.objects.get(id=item_id, user=request.user)
+    cart_item = CartItem.objects.get(id=item_id)
     if request.method == 'POST':
-        quantity = int(request.POST.get('quantity', 1))
-        if quantity > 0:
+        quantity = int(request.POST.get('quantity'))
+        if quantity > cart_item.product.stock:
+            messages.error(request, f"Only {cart_item.product.stock} items available in stock.")
+        elif quantity > 0:
             cart_item.quantity = quantity
             cart_item.save()
+            messages.success(request, 'Cart updated successfully.')
         else:
             cart_item.delete()
+            messages.success(request, 'Item removed from cart.')
     return redirect('cart_view')
+
 
 @login_required
 def delete_cart_item(request, item_id):

@@ -36,7 +36,6 @@
                                 <h5 class="card-title"><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a></h5>
                                 <p class="card-text">{{ product.description }}</p>
                                 <p class="card-text"><strong>${{ product.price }}</strong></p>
-                                <p class="card-text"><strong>Stock: {{ product.stock }}</strong></p>
                             </div>
                             <div class="card-footer d-flex justify-content-center">
                                 <a href="{% url 'add_to_cart' product.id %}" class="btn btn-custom add-to-cart-btn">

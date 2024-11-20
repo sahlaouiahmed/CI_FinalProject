@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('core.urls')),  # Core app URLs
     path('store/', include('store.urls')),  # Store app URLs
     path('accounts/', include('allauth.urls')),
+    path('articles/', include('articles.urls')),
 ]
 

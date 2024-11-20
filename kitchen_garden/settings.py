@@ -32,7 +32,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['8000-sahlaouiahm-cifinalproj-lkav3y3db5q.ws.codeinstitute-ide.net', 'ci-finalproject-93798f70d775.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5', # Crispy Bootstrap 5
     'core',
     'store',
+    'articles',
 ]
 
 AUTHENTICATION_BACKENDS = (
