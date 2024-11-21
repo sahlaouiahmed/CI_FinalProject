@@ -66,62 +66,127 @@ def delete_cart_item(request, item_id):
     return redirect('cart_view')
 
 ##############
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import CartItem
-from .forms import ShippingForm
-
-@login_required
-def checkout(request):
-    cart_items = CartItem.objects.filter(user=request.user)
-    if request.method == 'POST':
-        form = ShippingForm(request.POST)
-        if form.is_valid():
-            return redirect('order_confirmation')
-    else:
-        form = ShippingForm()
-
-    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'form': form})
-
-
-
-from django.shortcuts import render, redirect
+import stripe
+from django.conf import settings
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from .models import CartItem, Order
 from .forms import ShippingForm
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 @login_required
 def checkout(request):
     cart_items = CartItem.objects.filter(user=request.user)
     if request.method == 'POST':
         form = ShippingForm(request.POST)
         if form.is_valid():
-            # Collect items in a dictionary
-            items = {}
-            for item in cart_items:
-                items[item.product.id] = {
-                    'name': item.product.name,
-                    'quantity': item.quantity,
-                    'price': float(item.product.price) 
-                }
+            # Extract form data
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            address = form.cleaned_data['address']
+            city = form.cleaned_data['city']
+            state = form.cleaned_data['state']
+            zip_code = form.cleaned_data['zip_code']
 
-            # Create Order instance
-            order = Order.objects.create(
-                user=request.user,
-                first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name'],
-                email=form.cleaned_data['email'],
-                address=form.cleaned_data['address'],
-                city=form.cleaned_data['city'],
-                state=form.cleaned_data['state'],
-                zip_code=form.cleaned_data['zip_code'],
-                items=items  # Save items as JSON
+            # Calculate total amount in cents
+            amount = int(sum(item.quantity * item.product.price for item in cart_items) * 100)
+
+            # Create Stripe Checkout session
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': amount,
+                        'product_data': {
+                            'name': 'Order from Kitchen Garden'
+                        },
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=request.build_absolute_uri(reverse('payment_success')) + '?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=request.build_absolute_uri(reverse('payment_cancel')),
             )
-            # Clear the cart
-            cart_items.delete()
-            return redirect('order_confirmation')
+            request.session['checkout_data'] = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
+                'address': address,
+                'city': city,
+                'state': state,
+                'zip_code': zip_code,
+                'amount': amount / 100  # Storing in dollars for display
+            }
+            return redirect(session.url)
     else:
         form = ShippingForm()
 
-    return render(request, 'store/checkout.html', {'cart_items': cart_items, 'form': form})
+    context = {
+        'cart_items': cart_items,
+        'form': form,
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY
+    }
+    return render(request, 'store/checkout.html', context)
+
+@login_required
+def payment_success(request):
+    session_id = request.GET.get('session_id')
+    if session_id is None:
+        return redirect('checkout')  # If no session_id, redirect back to checkout
+
+    # Verify the session with Stripe
+    session = stripe.checkout.Session.retrieve(session_id)
+    if session.payment_status != 'paid':
+        return redirect('checkout')  # If payment not successful, redirect back to checkout
+
+    # Retrieve the checkout data stored in the session
+    checkout_data = request.session.pop('checkout_data', {})
+    if not checkout_data:
+        return redirect('checkout')  # No checkout data means something went wrong
+
+    # Retrieve cart items
+    cart_items = CartItem.objects.filter(user=request.user)
+
+    # Prepare items as a list of dictionaries with prices as strings
+    items = []
+    for item in cart_items:
+        items.append({
+            'product_id': item.product.id,
+            'name': item.product.name,
+            'price': str(item.product.price),  # Convert Decimal to string
+            'quantity': item.quantity
+        })
+
+    # Create order in the database
+    order = Order.objects.create(
+        user=request.user,
+        first_name=checkout_data['first_name'],
+        last_name=checkout_data['last_name'],
+        email=checkout_data['email'],
+        address=checkout_data['address'],
+        city=checkout_data['city'],
+        state=checkout_data['state'],
+        zip_code=checkout_data['zip_code'],
+        items=items,
+        total_amount=checkout_data['amount']  # Store the total amount
+    )
+
+    # Optionally, send a confirmation email to the customer
+
+    # Clear the cart
+    cart_items.delete()
+
+    return render(request, 'store/success.html', {
+        'order': order,
+        'total_amount': checkout_data['amount']
+    })
+
+@login_required
+def payment_cancel(request):
+    # Render the cancel page
+    return render(request, 'store/cancel.html')
+
 

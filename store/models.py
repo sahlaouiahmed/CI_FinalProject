@@ -40,10 +40,10 @@ class Order(models.Model):
     state = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=10)
     items = models.JSONField(default=dict)  # JSON field to store order items
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0) 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Order {self.id} by {self.user}"
 
-    def total_price(self):
-        return sum(item['quantity'] * item['price'] for item in self.items.values())
+

@@ -74,11 +74,38 @@
         {% endblock %}
     </main>
     <footer class="bg-light text-center py-4 mt-4">
-        <p>&copy; 2024 Kitchen Garden. All rights reserved.</p>
-        <div class="social-links">
-            <a href="#" class="btn btn-primary btn-sm mx-1"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="btn btn-info btn-sm mx-1"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="btn btn-danger btn-sm mx-1"><i class="fab fa-instagram"></i></a>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'product_list' %}?category=all">Seeds & Supplies</a></li>
+                        <li><a href="{% url 'article_list' %}">Articles</a></li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="btn btn-primary btn-sm mx-1"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-info btn-sm mx-1"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm mx-1"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="btn btn-dark btn-sm mx-1"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Subscribe to Our Newsletter</h5>
+                    <form>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="emailSubscription" placeholder="Enter your email">
+                        </div>
+                        <button type="submit" class="btn btn-success">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <p>&copy; <span id="currentYear"></span> Kitchen Garden. All rights reserved.</p>
         </div>
     </footer>
     <!-- Bootstrap JS and dependencies -->
@@ -86,6 +113,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Stripe.js --> 
+    <script src="https://js.stripe.com/v3/"></script> 
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <!---->
     <script src="{% static 'js/scripts.js' %}"></script>
 </body>
 </html>

@@ -32,7 +32,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['8000-sahlaouiahm-cifinalproj-lkav3y3db5q.ws.codeinstitute-ide.net', 'ci-finalproject-93798f70d775.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -184,3 +184,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#stripe settings
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY') 
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
