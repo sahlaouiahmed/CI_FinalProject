@@ -1,7 +1,8 @@
 body {
     font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
 }
-
+h1, h2, h3, h4, h5, h6 { font-weight: bolder;}
 html, body { height: 100%; }
 body { display: flex; flex-direction: column; } 
 main { flex: 1; } 
@@ -38,3 +39,26 @@ footer { flex-shrink: 0; }
     color: white;
 }
 .custom-input-group .form-control { margin-right: 10px; }
+
+/* Hero Section Custom Styles */
+.hero-section {
+    color: #ffffff; /* Text color remains white */
+    font-weight: bold; /* Make all text in the hero section bolder */
+}
+
+.hero-section h1 {
+    color: #ffc107; /* Heading color remains a vibrant shade of yellow */
+    font-weight: bolder; /* Make the heading even bolder */
+}
+
+.hero-section p {
+    color: #ffffff; /* Paragraph text color remains white */
+    font-weight: bold; /* Make paragraph text bolder */
+}
+
+.hero-section .btn {
+    color: #ffffff; /* Button text color remains white */
+    background-color: #28a745; /* Button background remains green */
+    border-color: #28a745; /* Button border color remains green */
+    font-weight: bold; /* Make the button text bolder */
+}
