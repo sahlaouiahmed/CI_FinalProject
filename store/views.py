@@ -65,11 +65,13 @@ def delete_cart_item(request, item_id):
     cart_item.delete()
     return redirect('cart_view')
 
+
 ##############
 import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from .models import CartItem, Order
 from .forms import ShippingForm
 
@@ -174,7 +176,35 @@ def payment_success(request):
         total_amount=checkout_data['amount']  # Store the total amount
     )
 
-    # Optionally, send a confirmation email to the customer
+    # Prepare the email content
+    items_list = '\n'.join([f"{item['quantity']} x {item['name']} - ${item['price']}" for item in items])
+    email_subject = 'Your Kitchen Garden Order Confirmation'
+    email_body = (
+        f"Dear {checkout_data['first_name']},\n\n"
+        f"Thank you for your order from Kitchen Garden! We're excited to help you grow your garden with our products.\n\n"
+        f"Here are the details of your order:\n\n"
+        f"Order Number: {order.id}\n"
+        f"Total Amount: ${checkout_data['amount']}\n\n"
+        f"Shipping Address:\n"
+        f"{checkout_data['first_name']} {checkout_data['last_name']}\n"
+        f"{checkout_data['address']}\n"
+        f"{checkout_data['city']}, {checkout_data['state']} {checkout_data['zip_code']}\n\n"
+        f"Order Items:\n"
+        f"{items_list}\n\n"
+        f"If you have any questions or need further assistance, feel free to contact us.\n\n"
+        f"Happy gardening!\n\n"
+        f"Best regards,\n"
+        f"The Kitchen Garden Team"
+    )
+
+    # Send confirmation email
+    send_mail(
+        email_subject,
+        email_body,
+        'kitchengardenci@gmail.com',
+        [checkout_data['email']],
+        fail_silently=False,
+    )
 
     # Clear the cart
     cart_items.delete()
@@ -189,4 +219,27 @@ def payment_cancel(request):
     # Render the cancel page
     return render(request, 'store/cancel.html')
 
+
+
+
+@login_required
+def order_list(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, 'store/order_list.html', {'orders': orders})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Order, Product
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order_items = []
+    for item in order.items:
+        product = get_object_or_404(Product, id=item['product_id'])
+        order_items.append({
+            'product': product,
+            'quantity': item['quantity']
+        })
+    return render(request, 'store/order_detail.html', {'order': order, 'order_items': order_items})
 
