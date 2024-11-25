@@ -32,7 +32,7 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['8000-sahlaouiahm-cifinalproj-lkav3y3db5q.ws.codeinstitute-ide.net', 'ci-finalproject-93798f70d775.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'core',
     'store',
     'articles',
+    'reviews',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -191,14 +192,10 @@ STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 
 
-#Stripe settings
-STRIPE_PUBLIC_KEY = 'pk_test_51QMq2ZL61iQpgbcSnJEjseARrIwpHBVUsSlDKjUU9jmgelhCgILwtkdJhIXBzVn93kuExtY2pWEGU1BEjlrjFZEf00AmExYv1f'
-STRIPE_SECRET_KEY = 'sk_test_51QMq2ZL61iQpgbcSbdxo7JT7h0il1Jgy47B3OeRAmuLPUhc9KVQJVBzYOkGAH8shOHkavSRrksGhtcoe6GTvpwjd00G1qY6yLU'
-
 # Emails settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'kitchengardenci@gmail.com'
-EMAIL_HOST_PASSWORD = 'vohhfagdpiywmujw'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')

@@ -23,5 +23,6 @@ urlpatterns = [
     path('store/', include('store.urls')),  # Store app URLs
     path('accounts/', include('allauth.urls')),
     path('articles/', include('articles.urls')),
+    path('reviews/', include('reviews.urls')),
 ]
 

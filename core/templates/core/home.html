@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load reviews_extras %}
 
 {% block title %}Home - Kitchen Garden{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Background Image -->
-<div class="hero-section text-center text-white py-5" id="hero" style="background-image: url('{% static 'images/cover.jpg' %}'); background-size: cover; background-position: center;">
+<!-- Hero Section -->
+<div class="hero-section" id="hero">
     <div class="container">
-        <h1 class="display-4 animate__animated animate__fadeInDown">Welcome to Kitchen Garden</h1>
-        <p class="lead animate__animated animate__fadeInUp"><span class="highlight-text">Your one-stop shop for all your kitchen gardening needs!</span></p>
-        <hr class="my-4">
-        <p class="animate__animated animate__fadeInUp"><span class="highlight-text">Discover a variety of seeds, supplies, and expert advice to make your kitchen garden thrive.</span></p>
-        <a class="btn btn-lg animate__animated animate__fadeInUp" href="{% url 'product_list' %}?category=all" role="button">Shop Now</a>
+        <div class="row align-items-start">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4">Welcome to Kitchen Garden</h1>
+                <p class="lead">Discover a variety of seeds, supplies, and expert advice to make your kitchen garden thrive.</p>
+                <a class="btn btn-primary btn-lg" href="{% url 'product_list' %}?category=all" role="button">Shop Now</a>
+            </div>
+            <div class="col-12">
+                <img src="{% static 'images/hero-image.jpg' %}" alt="Kitchen Garden" class="img-fluid">
+            </div>
+        </div>
     </div>
 </div>
 
-
+<!-- Our Products Section -->
 <div class="container mt-5">
     <div class="row mb-4 text-center">
         <div class="col">
@@ -68,44 +74,39 @@
         </div>
     </div>
 
+    <!-- Customer Reviews Section -->
     <div class="row mt-5 mb-4 text-center">
         <div class="col">
-            <h2>Why Choose Us</h2>
+            <h2>Customer Reviews</h2>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card text-center shadow-sm h-100 d-flex flex-column">
-                <div class="card-body flex-grow-1">
-                    <div class="mb-3">
-                        <i class="fas fa-credit-card fa-3x text-primary"></i>
+        {% for review in reviews %}
+            <div class="col-md-4 mb-4">
+                <div class="card text-center shadow-sm h-100 d-flex flex-column">
+                    <div class="card-body flex-grow-1">
+                        <h5 class="card-title">{{ review.user.username }}</h5>
+                        <p class="card-text">
+                            {% for _ in review.rating|times %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                            {% for _ in 5|times %}
+                                {% if forloop.counter > review.rating %}
+                                    <i class="far fa-star text-warning"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p class="card-text">{{ review.comment }}</p>
+                        <p class="text-muted"><small>{{ review.created_at }}</small></p>
                     </div>
-                    <h5 class="card-title">Secure Payments</h5>
-                    <p class="card-text">Fast and secure payment options.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card text-center shadow-sm h-100 d-flex flex-column">
-                <div class="card-body flex-grow-1">
-                    <div class="mb-3">
-                        <i class="fas fa-shipping-fast fa-3x text-danger"></i>
-                    </div>
-                    <h5 class="card-title">Free Shipping & Returns</h5>
-                    <p class="card-text">Enjoy free shipping and hassle-free returns.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card text-center shadow-sm h-100 d-flex flex-column">
-                <div class="card-body flex-grow-1">
-                    <div class="mb-3">
-                        <i class="fas fa-headset fa-3x text-success"></i>
-                    </div>
-                    <h5 class="card-title">24/7 Customer Service</h5>
-                    <p class="card-text">We're here to help, anytime.</p>
-                </div>
-            </div>
+        {% endfor %}
+    </div>
+    <div class="row text-center mb-4">
+        <div class="col">
+            <a href="{% url 'submit_review' %}" class="btn btn-primary">Add Review</a>
+            <a href="{% url 'show_more_reviews' %}" class="btn btn-secondary">Show More Reviews</a>
         </div>
     </div>
 </div>

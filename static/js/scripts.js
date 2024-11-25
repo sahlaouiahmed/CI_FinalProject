@@ -40,12 +40,12 @@ function addToCart(productId) {
     .then(data => {
         if (data.success) {
             showMessage('Item added to cart successfully!');
-            // Update cart count, etc.
         } else {
             alert('Something went wrong. Please try again.');
         }
     });
 }
+///////////////////////////////
 
 function showMessage(message) {
     const messageBox = document.createElement('div');
@@ -79,6 +79,7 @@ function getCookie(name) {
 }
 
 
+///////////////////////////////
 
 document.getElementById('subscriptionForm').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -94,10 +95,11 @@ document.getElementById('subscriptionForm').addEventListener('submit', function(
     .then(response => response.text())
     .then(data => {
         alert(data);
-        window.location.href = '/';  // Reload home page
+        window.location.href = '/';  
     });
 });
 
+///////////////////////////////
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -112,3 +114,13 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+        var messageContainer = document.getElementById('message-container');
+        if (messageContainer) {
+            messageContainer.style.display = 'none';
+        }
+    }, 3000);  // Set to 3 seconds
+});

@@ -3,9 +3,25 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from .models import Profile
+from reviews.models import Review
+
+
+
+#def home(request):
+#    return render(request, 'core/home.html')
+
+from django.shortcuts import render
+from reviews.models import Review
 
 def home(request):
-    return render(request, 'core/home.html')
+    reviews = Review.objects.all().order_by('-created_at')[:3]  # Retrieve the latest three reviews
+    return render(request, 'core/home.html', {'reviews': reviews})
+
+def show_more_reviews(request):
+    reviews = Review.objects.all().order_by('-created_at')  # Retrieve all reviews ordered by creation date
+    return render(request, 'core/show_more_reviews.html', {'reviews': reviews})
+
+
 
 def contact(request):
     return render(request, 'core/contact.html')
