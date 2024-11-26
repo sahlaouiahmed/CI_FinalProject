@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import product_list, product_detail, add_to_cart, cart_view, update_cart, delete_cart_item 
-from .views import checkout,payment_success,payment_cancel, order_detail, order_list
+from .views import checkout,payment_success,payment_cancel, order_detail, order_list, add_product, edit_product, delete_product
 
 urlpatterns = [
     path('products/', views.product_list, name='product_list'),
@@ -15,4 +15,8 @@ urlpatterns = [
     path('cancel/',payment_cancel, name='payment_cancel'),
     path('orders/', views.order_list, name='order_list'), 
     path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+    #### Superuser access
+    path('add/', add_product, name='add_product'), 
+    path('edit/<int:pk>/', edit_product, name='edit_product'), 
+    path('delete/<int:pk>/', delete_product, name='delete_product'),
 ]

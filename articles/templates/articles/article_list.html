@@ -5,14 +5,29 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="display-4 mb-4">Articles</h2>
+    {% if user.is_superuser %}
+    <div class="row mb-4">
+        <div class="col-md-12 text-right">
+            <a href="{% url 'add_article' %}" class="btn btn-primary btn-custom-width">Add Article</a>
+        </div>
+    </div>
+    {% endif %}
     <div class="row">
         {% for article in articles %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
+            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                <div class="card text-center shadow-sm d-flex flex-column">
                     <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
+                    <div class="card-body flex-grow-1">
                         <h5 class="card-title"><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a></h5>
                         <p class="card-text text-muted">Published on: {{ article.published_date }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-center">
+                        {% if user.is_superuser %}
+                        <div class="mt-2 d-flex justify-content-around">
+                            <a href="{% url 'edit_article' article.id %}" class="btn btn-secondary btn-sm btn-custom-width mr-2">Edit</a>
+                            <a href="{% url 'delete_article' article.id %}" class="btn btn-danger btn-sm btn-custom-width">Delete</a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

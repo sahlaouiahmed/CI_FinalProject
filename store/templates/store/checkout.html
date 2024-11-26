@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             <h2 class="display-4 text-center mb-4">Checkout</h2>
             <form method="post" id="payment-form">
                 {% csrf_token %}
@@ -70,7 +70,7 @@
                     <div id="card-errors" role="alert"></div>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success btn-md w-50">Place Order</button>
+                    <button type="submit" class="btn btn-success btn-md w-100 w-md-50">Place Order</button>
                 </div>
             </form>
         </div>

@@ -17,9 +17,14 @@ def product_list(request):
     return render(request, 'store/product_list.html', context)
 
 
+from django.shortcuts import render, get_object_or_404
+from .models import Product
+
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    return render(request, 'store/product_detail.html', {'product': product})
+    related_products = Product.objects.filter(category=product.category).exclude(pk=pk)[:4]  # Fetch related products from the same category, exclude the current product, limit to 4
+    return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
+
 
 
 
@@ -243,3 +248,49 @@ def order_detail(request, order_id):
         })
     return render(request, 'store/order_detail.html', {'order': order, 'order_items': order_items})
 
+
+
+#SUPERUSER 
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test
+from .models import Product
+from .forms import ProductForm
+
+def superuser_required(view_func):
+    decorated_view_func = user_passes_test(lambda u: u.is_superuser)(view_func)
+    return decorated_view_func
+
+@superuser_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Product added successfully!')
+            return redirect('product_list')
+    else:
+        form = ProductForm()
+    return render(request, 'store/add_product.html', {'form': form})
+
+@superuser_required
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Product updated successfully!')
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'store/edit_product.html', {'form': form, 'product': product})
+
+@superuser_required
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        messages.success(request, 'Product deleted successfully!')
+        return redirect('product_list')
+    return render(request, 'store/confirm_delete.html', {'product': product})
