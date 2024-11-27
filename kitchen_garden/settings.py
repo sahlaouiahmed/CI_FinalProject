@@ -9,10 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+from pathlib import Path
 import os
 import sys
-from pathlib import Path
 import dj_database_url
 
 if os.path.isfile('env.py'):
@@ -34,7 +33,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['8000-sahlaouiahm-cifinalproj-lkav3y3db5q.ws.codeinstitute-ide.net', 'ci-finalproject-93798f70d775.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    '8000-sahlaouiahm-cifinalproj-lkav3y3db5q.ws.codeinstitute-ide.net', 
+    '.herokuapp.com', 
+    'ci-finalproject-93798f70d775.herokuapp.com', 
+    'localhost'
+]
 
 
 # Application definition
@@ -50,12 +54,13 @@ INSTALLED_APPS = [
     'allauth', 
     'allauth.account', 
     'allauth.socialaccount',
-    'crispy_forms', # Django Crispy Forms 
-    'crispy_bootstrap5', # Crispy Bootstrap 5
     'core',
     'store',
     'articles',
     'reviews',
+
+    'crispy_forms', # Django Crispy Forms 
+    'crispy_bootstrap5', # Crispy Bootstrap 5
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -64,21 +69,22 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-# Allauth settings
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_USERNAME_REQUIRED = True
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+SITE_ID = 1
 
-# Optional: Configure email backend
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-
-
-SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -177,8 +183,31 @@ STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static'), ]
 # Directory for collected static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Static files storage using WhiteNoise 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+if 'USE_AWS' in os.environ:
+    # Cache control
+    AWS_S3_OBJECT_PARAMETERS = {
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'CacheControl': 'max-age=94608000',
+    }
+
+    # Bucket Config
+    AWS_STORAGE_BUCKET_NAME = 'ckz8780-boutique-ado'
+    AWS_S3_REGION_NAME = 'us-east-1'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+    # Static and media files
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_LOCATION = 'static'
+    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+    MEDIAFILES_LOCATION = 'media'
+
+    # Override static and media URLs in production
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+
+
 
 
 # Default primary key field type
