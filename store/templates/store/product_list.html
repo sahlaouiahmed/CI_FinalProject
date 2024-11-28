@@ -10,6 +10,18 @@
             <h2>Our Products</h2>
         </div>
     </div>
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <form method="GET" action="{% url 'product_list' %}">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search for products...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     {% if user.is_superuser %}
     <div class="row mb-4">
         <div class="col-md-12 text-right">
@@ -20,7 +32,7 @@
     <div class="row mb-4">
         <div class="col-md-3">
             <h3>Filter by Category</h3>
-            <div class="list-group">
+            <div class="list-group mb-3">
                 <a href="{% url 'product_list' %}?category=all" class="list-group-item list-group-item-action{% if category == 'all' %} active{% endif %}">
                     All Products
                 </a>

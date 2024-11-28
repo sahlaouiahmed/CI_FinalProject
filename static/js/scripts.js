@@ -32,21 +32,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to handle adding products to the cart
 function addToCart(productId) {
-    // Send a POST request to add the product to the cart
+
     fetch(`/add_to_cart/${productId}/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken'),
         },
-        body: JSON.stringify({ productId: productId })  // Send product ID as JSON data
+        body: JSON.stringify({ productId: productId }) 
     })
-    .then(response => response.json())  // Parse the response JSON
+    .then(response => response.json())  
     .then(data => {
         if (data.success) {
-            showMessage('Item added to cart successfully!');  // Show success message
+            showMessage('Item added to cart successfully!');  
         } else {
-            alert('Something went wrong. Please try again.');  // Show error message
+            alert('Something went wrong. Please try again.');  
         }
     });
 }

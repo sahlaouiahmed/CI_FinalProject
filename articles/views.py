@@ -1,10 +1,19 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Article
 
-
 def article_list(request):
-    articles = Article.objects.all().order_by('-published_date')  # Sort by published date in descending order
-    return render(request, 'articles/article_list.html', {'articles': articles})
+    query = request.GET.get('q', '')
+    if query:
+        articles = Article.objects.filter(title__icontains=query).order_by('-published_date')
+    else:
+        articles = Article.objects.all().order_by('-published_date')
+    context = {
+        'articles': articles,
+        'query': query,
+    }
+    return render(request, 'articles/article_list.html', context)
+
+
 
 
 def article_detail(request, pk):

@@ -3,18 +3,29 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, CartItem
 from django.contrib import messages
 
+from django.shortcuts import render
+from .models import Product
+
+from django.shortcuts import render
+from .models import Product
 
 def product_list(request):
-    category = request.GET.get('category', 'all')  # Default to 'all' if no category is provided
-    if category == 'all':
-        products = Product.objects.all()
+    query = request.GET.get('q', '')
+    if query:
+        products = Product.objects.filter(name__icontains=query)
     else:
-        products = Product.objects.filter(category=category)
+        products = Product.objects.all()
+    category = request.GET.get('category', 'all')
+    if category != 'all':
+        products = products.filter(category__name__iexact=category)
     context = {
         'products': products,
         'category': category,
+        'query': query,
     }
     return render(request, 'store/product_list.html', context)
+
+
 
 
 from django.shortcuts import render, get_object_or_404
