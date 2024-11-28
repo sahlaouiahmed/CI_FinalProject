@@ -3,11 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, CartItem
 from django.contrib import messages
 
-from django.shortcuts import render
-from .models import Product
-
-from django.shortcuts import render
-from .models import Product
 
 def product_list(request):
     query = request.GET.get('q', '')
@@ -17,7 +12,7 @@ def product_list(request):
         products = Product.objects.all()
     category = request.GET.get('category', 'all')
     if category != 'all':
-        products = products.filter(category__name__iexact=category)
+        products = products.filter(category__iexact=category)
     context = {
         'products': products,
         'category': category,
@@ -35,9 +30,6 @@ def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     related_products = Product.objects.filter(category=product.category).exclude(pk=pk)[:4]  # Fetch related products from the same category, exclude the current product, limit to 4
     return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
-
-
-
 
 
 @login_required
