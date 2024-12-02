@@ -31,10 +31,9 @@ def product_detail(request, pk):
     related_products = Product.objects.filter(category=product.category).exclude(pk=pk)[:4]  # Fetch related products from the same category, exclude the current product, limit to 4
     return render(request, 'store/product_detail.html', {'product': product, 'related_products': related_products})
 
-
 @login_required
 def add_to_cart(request, product_id):
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
     if product.stock > 0:
         cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
         if not created:
@@ -42,7 +41,11 @@ def add_to_cart(request, product_id):
         cart_item.save()
         product.stock -= 1
         product.save()
+        messages.success(request, f'{product.name} has been added to your cart successfully!')
+    else:
+        messages.error(request, 'Sorry, this product is out of stock.')
     return redirect('product_list')
+
 
 
 @login_required
@@ -232,8 +235,9 @@ def payment_cancel(request):
 
 @login_required
 def order_list(request):
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'store/order_list.html', {'orders': orders})
+
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
