@@ -101,17 +101,21 @@
                 <div class="col-md-4">
                     <h5>Follow Us</h5>
                     <div class="social-links">
-                        <a href="#" class="btn btn-primary btn-sm mx-1"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="btn btn-info btn-sm mx-1"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="btn btn-danger btn-sm mx-1"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="btn btn-dark btn-sm mx-1"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" target="_blank" rel="nofollow noreferrer" class="btn btn-primary btn-sm mx-1"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="#" target="_blank" rel="nofollow noreferrer" class="btn btn-info btn-sm mx-1"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="#" target="_blank" rel="nofollow noreferrer" class="btn btn-danger btn-sm mx-1"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank" rel="nofollow noreferrer" class="btn btn-dark btn-sm mx-1"><i
+                                class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <h5>Subscribe to Our Newsletter</h5>
                     {% if user.is_authenticated %}
                     {% if user.profile.is_subscribed %}
-                    <form method="post" action="{% url 'unsubscribe' %}">
+                    <form method="post" action="{% url 'subscribe' %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Unsubscribe</button>
                     </form>
@@ -122,13 +126,7 @@
                     </form>
                     {% endif %}
                     {% else %}
-                    <form id="subscriptionForm">
-                        <div class="form-group">
-                            <input type="email" class="form-control" id="emailSubscription"
-                                placeholder="Enter your email" required>
-                        </div>
-                        <button type="submit" class="btn btn-success">Subscribe</button>
-                    </form>
+                    <p>Please <a href="{% url 'account_login' %}">log in</a> to subscribe to the newsletter.</p>
                     {% endif %}
                 </div>
             </div>
@@ -136,6 +134,7 @@
             <p>&copy; <span id="currentYear"></span> Kitchen Garden. All rights reserved.</p>
         </div>
     </footer>
+
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -164,4 +163,5 @@
         });
     </script>
 </body>
+
 </html>
