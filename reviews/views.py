@@ -21,4 +21,5 @@ def submit_review(request):
 
 def view_reviews(request):
     reviews = Review.objects.all()
-    return render(request, 'reviews/view_reviews.html', {'reviews': reviews})
+    return render(request, 'core/show_more_reviews.html', {'reviews': reviews})
+

@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from .models import Review
 from django.contrib.messages import get_messages
 from datetime import datetime
+from .forms import ReviewForm
 
+########## PASS ############
 class SubmitReviewViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -39,6 +41,8 @@ class SubmitReviewViewTestCase(TestCase):
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any(message.message == 'Your review has been added successfully!' for message in messages))
 
+
+############## PASS ##############
 class ViewReviewsViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -49,6 +53,37 @@ class ViewReviewsViewTestCase(TestCase):
     def test_view_reviews_view(self):
         response = self.client.get(reverse('view_reviews'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'reviews/view_reviews.html')
+        self.assertTemplateUsed(response, 'core/show_more_reviews.html')
         self.assertContains(response, 'Excellent!')
         self.assertContains(response, 'Good!')
+
+
+############ PASS ###########
+class ReviewFormTestCase(TestCase):
+    def test_valid_form(self):
+        form_data = {'rating': 5, 'comment': 'Great product!'}
+        form = ReviewForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form_missing_rating(self):
+        form_data = {'comment': 'Great product!'}
+        form = ReviewForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('rating', form.errors)
+
+    def test_invalid_form_invalid_rating(self):
+        form_data = {'rating': 6, 'comment': 'Great product!'}  # Invalid rating (should be 1-5)
+        form = ReviewForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('rating', form.errors)
+
+    def test_invalid_form_missing_comment(self):
+        form_data = {'rating': 5}
+        form = ReviewForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('comment', form.errors)
+
+    def test_widgets(self):
+        form = ReviewForm()
+        self.assertEqual(form.fields['rating'].widget.__class__.__name__, 'RadioSelect')
+        self.assertEqual(form.fields['comment'].widget.__class__.__name__, 'Textarea')
