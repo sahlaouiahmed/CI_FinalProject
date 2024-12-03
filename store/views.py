@@ -21,11 +21,6 @@ def product_list(request):
     return render(request, 'store/product_list.html', context)
 
 
-
-
-from django.shortcuts import render, get_object_or_404
-from .models import Product
-
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     related_products = Product.objects.filter(category=product.category).exclude(pk=pk)[:4]  # Fetch related products from the same category, exclude the current product, limit to 4
@@ -70,11 +65,14 @@ def update_cart(request, item_id):
     return redirect('cart_view')
 
 
+
 @login_required
 def delete_cart_item(request, item_id):
     cart_item = CartItem.objects.get(id=item_id, user=request.user)
     cart_item.delete()
+    messages.success(request, 'Item removed from cart.')
     return redirect('cart_view')
+
 
 
 ##############
@@ -144,86 +142,11 @@ def checkout(request):
     }
     return render(request, 'store/checkout.html', context)
 
-@login_required
-def payment_success(request):
-    session_id = request.GET.get('session_id')
-    if session_id is None:
-        return redirect('checkout')  # If no session_id, redirect back to checkout
 
-    # Verify the session with Stripe
-    session = stripe.checkout.Session.retrieve(session_id)
-    if session.payment_status != 'paid':
-        return redirect('checkout')  # If payment not successful, redirect back to checkout
 
-    # Retrieve the checkout data stored in the session
-    checkout_data = request.session.pop('checkout_data', {})
-    if not checkout_data:
-        return redirect('checkout')  # No checkout data means something went wrong
-
-    # Retrieve cart items
-    cart_items = CartItem.objects.filter(user=request.user)
-
-    # Prepare items as a list of dictionaries with prices as strings
-    items = []
-    for item in cart_items:
-        items.append({
-            'product_id': item.product.id,
-            'name': item.product.name,
-            'price': str(item.product.price),  # Convert Decimal to string
-            'quantity': item.quantity
-        })
-
-    # Create order in the database
-    order = Order.objects.create(
-        user=request.user,
-        first_name=checkout_data['first_name'],
-        last_name=checkout_data['last_name'],
-        email=checkout_data['email'],
-        address=checkout_data['address'],
-        city=checkout_data['city'],
-        state=checkout_data['state'],
-        zip_code=checkout_data['zip_code'],
-        items=items,
-        total_amount=checkout_data['amount']  # Store the total amount
-    )
-
-    # Prepare the email content
-    items_list = '\n'.join([f"{item['quantity']} x {item['name']} - ${item['price']}" for item in items])
-    email_subject = 'Your Kitchen Garden Order Confirmation'
-    email_body = (
-        f"Dear {checkout_data['first_name']},\n\n"
-        f"Thank you for your order from Kitchen Garden! We're excited to help you grow your garden with our products.\n\n"
-        f"Here are the details of your order:\n\n"
-        f"Order Number: {order.id}\n"
-        f"Total Amount: ${checkout_data['amount']}\n\n"
-        f"Shipping Address:\n"
-        f"{checkout_data['first_name']} {checkout_data['last_name']}\n"
-        f"{checkout_data['address']}\n"
-        f"{checkout_data['city']}, {checkout_data['state']} {checkout_data['zip_code']}\n\n"
-        f"Order Items:\n"
-        f"{items_list}\n\n"
-        f"If you have any questions or need further assistance, feel free to contact us.\n\n"
-        f"Happy gardening!\n\n"
-        f"Best regards,\n"
-        f"The Kitchen Garden Team"
-    )
-
-    # Send confirmation email
-    send_mail(
-        email_subject,
-        email_body,
-        'kitchengardenci@gmail.com',
-        [checkout_data['email']],
-        fail_silently=False,
-    )
-
-    # Clear the cart
-    cart_items.delete()
-
-    return render(request, 'store/success.html', {
-        'order': order,
-        'total_amount': checkout_data['amount']
-    })
+@login_required 
+def payment_success(request): 
+    return render(request, 'store/success.html')
 
 @login_required
 def payment_cancel(request):

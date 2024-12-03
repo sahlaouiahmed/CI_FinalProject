@@ -1,4 +1,8 @@
 from django import forms
+from .models import Product
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Row, Column
+
 
 class ShippingForm(forms.Form):
     first_name = forms.CharField(max_length=100, initial="")
@@ -9,21 +13,6 @@ class ShippingForm(forms.Form):
     state = forms.CharField(max_length=100, initial="")
     zip_code = forms.CharField(max_length=10, initial="")
 
-from django import forms
-from .models import Product
-
-class ProductForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ['name', 'description', 'price', 'image', 'category', 'stock']
-
-
-
-
-from django import forms
-from .models import Product
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
 
 class ProductForm(forms.ModelForm):
     class Meta:
