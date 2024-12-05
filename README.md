@@ -306,3 +306,150 @@ The Reviews app enables users to leave feedback about their experiences with the
 | created_at      |
 +-----------------+
 ```
+
+## Website Functionalities
+
+Our project offers a wide range of functionalities to enhance user experience and streamline operations. Below is a detailed description of each part of the project:
+
+### Home Page
+
+The home page provides an overview of the website. It's designed to give users a welcoming and intuitive entry point to explore our offerings.
+
+### User Authentication
+
+- **Registration**: Allows new users to create an account by providing their details.
+- **Login/Logout**: Enables users to log in to access their account and log out securely.
+- **Password Reset**: Provides functionality for users to reset their password via email.
+
+### User Profile
+
+- **View Profile**: Users can view their profile information including their subscription status.
+- **Edit Profile**: Users can update their personal information, including changing their password.
+
+### Articles
+
+- **View Articles**: Users can browse a list of articles and read individual articles.
+- **Search Articles**: Users can search for articles by keywords.
+- **Superuser Functionality**:
+  - **Add Article**: Superusers can add new articles to the platform.
+  - **Edit Article**: Superusers can edit existing articles.
+  - **Delete Article**: Superusers can delete articles.
+
+### Products
+
+- **View Products**: Users can browse a list of products, view product details, and search for products by category.
+- **Add to Cart**: Users can add products to their shopping cart and update quantities.
+- **Checkout**: Users can proceed to checkout, enter their shipping details, and make payments using Stripe.
+- **Superuser Functionality**:
+  - **Add Product**: Superusers can add new products to the platform.
+  - **Edit Product**: Superusers can edit existing products.
+  - **Delete Product**: Superusers can delete products.
+
+### Cart
+
+- **View Cart**: Users can view items in their cart, update quantities, and remove items.
+- **Checkout**: Users can proceed to checkout from their cart.
+
+### Orders
+
+- **Order History**: Users can view their past orders and order details.
+- **Order Details**: Provides detailed information about individual orders, including shipping status.
+
+### Reviews
+
+- **Submit Review**: Users can submit reviews for products they have purchased.
+- **View Reviews**: Users can view reviews submitted by other users for each product.
+
+### Subscription
+
+- **Subscribe/Unsubscribe**: Users can manage their subscription status, opting in or out of newsletters and special offers.
+- **Subscription Status**: Users can view their current subscription status in their profile.
+
+### Admin Panel
+
+- **User Management**: Superusers can manage user accounts, including creating, editing, and deleting users.
+- **Content Management**: Superusers can manage website content, including products, articles, and reviews.
+- **Order Management**: Superusers can view and manage orders placed by users.
+
+These functionalities work together to provide a seamless and robust experience for both users and administrators. By leveraging these features, we aim to create an engaging and user-friendly platform that meets the needs of our community.
+
+## Automated Testing
+
+### Overview
+
+Our project employs the Django `TestCase` framework to ensure the reliability and robustness of the application's functionality. Automated tests help us catch bugs early, verify that our code behaves as expected, and maintain the quality of the codebase as the project evolves.
+
+### Testing Features
+
+1. **Models Tests**: We have written tests to validate the behavior of our models, ensuring that data integrity and relationships are maintained.
+    - **Article Model**: Tests include creating and retrieving articles, verifying default values, and testing string representations.
+    - **Profile Model**: Tests focus on creating user profiles, checking subscription status, and user associations.
+    - **Product Model**: Includes tests for creating products, validating category choices, and stock management.
+    - **CartItem Model**: Tests for adding items to the cart, updating quantities, and user associations.
+    - **Order Model**: Tests for creating orders, verifying order details, and JSON field validations for order items.
+    - **Review Model**: Includes tests for creating reviews, rating validations, and string representations.
+
+2. **Views Tests**: These tests check the responses of our views, ensuring that the correct templates are rendered and that the views behave correctly under various conditions.
+    - **Store Views**: Tests for browsing products, viewing product details, adding products to the cart, and checkout process.
+    - **Review Views**: Includes tests for submitting and displaying reviews, rating validation, and review moderation.
+    - **Articles Views**: Tests for displaying a list of articles, viewing individual articles, and ensuring the articles are correctly rendered.
+    - **Subscription Views**: Tests for managing subscriptions, including subscribing and unsubscribing actions.
+    - **Superuser Functionality**: 
+      - **Add Product**: Tests that a superuser can add a new product.
+      - **Edit Product**: Tests that a superuser can edit an existing product.
+      - **Delete Product**: Tests that a superuser can delete a product.
+      - **Add Article**: Tests that a superuser can add a new article.
+      - **Edit Article**: Tests that a superuser can edit an existing article.
+      - **Delete Article**: Tests that a superuser can delete an article.
+
+3. **Forms Tests**: Form tests ensure that our forms handle input correctly and provide appropriate validation messages.
+    - **Order Forms**: Includes tests for validating shipping details and payment information during checkout.
+    - **Review Forms**: Tests for rating selection, comment validation, and form submission.
+
+## Deployment
+
+This project is deployed to Heroku using the GitHub integration. We follow the steps below to deploy a version of this project.
+
+### Steps to Deploy
+
+1. **Create a Heroku App**:
+   - Log in to a Heroku account and create a new app by clicking the "New" button on the dashboard and selecting "Create new app." Provide the app a unique name and select the appropriate region.
+
+2. **Connect GitHub Repository**:
+   - In the Deploy tab of the newly created app, locate the "Deployment method" section.
+   - Select "GitHub" as the deployment method.
+   - Connect the GitHub account and select the repository to deploy.
+
+3. **Environment Variables**:
+   - Set up environment variables in the "Settings" tab of the Heroku app. Add the following environment variables:
+     - `SECRET_KEY`: The Django secret key.
+     - `DATABASE_URL`: The database URL.
+     - `STRIPE_PUBLIC_KEY`: Your Stripe public key.
+     - `STRIPE_SECRET_KEY`: Your Stripe secret key.
+     - `EMAIL_HOST_USER`: The email host user.
+     - `EMAIL_HOST_PASSWORD`: The email host password.
+4. **Procfile**:
+   - Ensure a `Procfile` with the following content is present:
+     ```
+        web: gunicorn kitchen_garden.wsgi
+     ```
+
+5. **Collect Static Files**:
+   - Ensure `settings.py` is configured to collect static files. Add the following settings:
+     ```python
+     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+     STATIC_URL = '/static/'
+
+     # Extra places for collectstatic to find static files.
+     STATICFILES_DIRS = (
+         os.path.join(BASE_DIR, 'static'),
+     )
+     ```
+
+6. **Push to GitHub**:
+   - Ensure all changes are committed to the GitHub repository.
+
+7. **Deploy via Heroku Dashboard**:
+   - In the Deploy tab, scroll down to the "Manual deploy" section.
+   - Select the main branch.
+   - Click "Deploy Branch."
