@@ -30,6 +30,9 @@ class CartItem(models.Model):
 
 
 
+from django.db import models
+from django.contrib.auth.models import User
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
@@ -39,11 +42,15 @@ class Order(models.Model):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=10)
-    items = models.JSONField(default=dict)  # JSON field to store order items
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0) 
+    items = models.JSONField(default=list)  # JSON field to store order items
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    delivery_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)  
+    shipping_date = models.DateField(null=True, blank=True)  
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Order {self.id} by {self.user}"
+
+
 
 
