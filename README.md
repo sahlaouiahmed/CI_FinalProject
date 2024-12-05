@@ -261,8 +261,10 @@ The Reviews app enables users to leave feedback about their experiences with the
   - `city`: `CharField` (max_length=100)
   - `state`: `CharField` (max_length=100)
   - `zip_code`: `CharField` (max_length=10)
-  - `items`: `JSONField` (default=dict)
+  - `items`: `JSONField` (default=list)
   - `total_amount`: `DecimalField` (max_digits=10, decimal_places=2, default=0.0)
+  - `delivery_cost`: `DecimalField` (max_digits=10, decimal_places=2, default=0.0)
+  - `shipping_date`: `DateField` (null=True, blank=True)
   - `created_at`: `DateTimeField` (auto_now_add=True)
 
 ```plaintext
@@ -280,9 +282,12 @@ The Reviews app enables users to leave feedback about their experiences with the
 | zip_code        |
 | items           |
 | total_amount    |
+| delivery_cost   |
+| shipping_date   |
 | created_at      |
 +-----------------+
 ```
+
 
 
 ### Review Model
@@ -453,3 +458,22 @@ This project is deployed to Heroku using the GitHub integration. We follow the s
    - In the Deploy tab, scroll down to the "Manual deploy" section.
    - Select the main branch.
    - Click "Deploy Branch."
+
+
+
+
+## Future Ideas
+
+- **Enhanced Product Search**: Implement advanced search functionality with filters for price range, categories, ratings, etc.
+- **Product Reviews and Ratings**: Allow users to leave reviews and ratings for products to help other customers make informed decisions.
+- **Wishlist Feature**: Enable users to create and manage wishlists for products they are interested in purchasing later.
+- **Discount Coupons and Promotions**: Integrate a system for applying discount coupons and running promotional campaigns.
+- **Order Tracking**: Provide real-time order tracking information for customers to monitor their shipments.
+- **Multi-language Support**: Add support for multiple languages to cater to a broader audience.
+- **Mobile App**: Develop a mobile application to offer a seamless shopping experience on smartphones and tablets.
+- **Subscription Service**: Introduce subscription-based products or services for recurring purchases.
+- **AI-Powered Recommendations**: Use machine learning to provide personalized product recommendations based on user behavior and preferences.
+- **Social Media Integration**: Allow users to share their purchases and favorite products on social media platforms.
+- **Analytics Dashboard**: Create an admin dashboard with detailed analytics and reports on sales, user behavior, and more.
+- **Customer Support Chatbot**: Implement an AI-powered chatbot to assist customers with their inquiries and issues in real-time.
+- **Advanced Payment Options**: Include additional payment methods such as digital wallets, cryptocurrencies, and installment plans.

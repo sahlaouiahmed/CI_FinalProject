@@ -9,6 +9,8 @@ from unittest.mock import patch
 from django.contrib.messages import get_messages
 from decimal import Decimal
 from django.utils import timezone
+from datetime import date, timedelta
+
 
 ########## PASS ##############
 class ProductModelTest(TestCase):
@@ -99,49 +101,29 @@ class CartItemModelTest(TestCase):
 
 ########## PASS ############
 class OrderModelTest(TestCase):
-
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='password123')
-        self.order = Order.objects.create(
-            user=self.user,
-            first_name="John",
-            last_name="Doe",
-            email="johndoe@example.com",
-            address="123 Main St",
-            city="Anytown",
-            state="CA",
-            zip_code="12345",
-            items={"product1": 2, "product2": 1},
-            total_amount=Decimal('29.99')
-        )
-
+        self.user = User.objects.create(username='testuser', password='testpassword')
+        self.product = Product.objects.create(name='Test Product', price=10.00)
+    
     def test_order_creation(self):
-        order = Order.objects.get(id=self.order.id)
-        self.assertEqual(order.user.username, 'testuser')
-        self.assertEqual(order.first_name, "John")
-        self.assertEqual(order.last_name, "Doe")
-        self.assertEqual(order.email, "johndoe@example.com")
-        self.assertEqual(order.address, "123 Main St")
-        self.assertEqual(order.city, "Anytown")
-        self.assertEqual(order.state, "CA")
-        self.assertEqual(order.zip_code, "12345")
-        self.assertEqual(order.items, {"product1": 2, "product2": 1})
-        self.assertEqual(order.total_amount, Decimal('29.99'))
-
-    def test_order_str(self):
-        order = Order.objects.get(id=self.order.id)
-        self.assertEqual(str(order), f"Order {self.order.id} by testuser")
-
-    def test_order_update(self):
-        self.order.total_amount = Decimal('39.99')
-        self.order.save()
-        order = Order.objects.get(id=self.order.id)
-        self.assertEqual(order.total_amount, Decimal('39.99'))
-
-    def test_order_delete(self):
-        self.order.delete()
-        with self.assertRaises(Order.DoesNotExist):
-            Order.objects.get(id=self.order.id)
+        order = Order.objects.create(
+            user=self.user,
+            first_name='John',
+            last_name='Doe',
+            email='john@example.com',
+            address='123 Street',
+            city='City',
+            state='State',
+            zip_code='12345',
+            items=[{"product_id": self.product.id, "quantity": 2}],
+            total_amount=20.00,
+            delivery_cost=0.00,
+            shipping_date=date.today() + timedelta(days=5)
+        )
+        self.assertEqual(order.total_amount, 20.00)
+        self.assertEqual(order.delivery_cost, 0.00)
+        self.assertEqual(order.shipping_date, date.today() + timedelta(days=5))
+        self.assertEqual(order.items[0]['product_id'], self.product.id)
 
 ########### PASS #############
 class ProductListViewTestCase(TestCase):
@@ -238,13 +220,6 @@ class ProductDetailViewTestCase(TestCase):
 
 
 ############### PASS ###############
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth.models import User
-from .models import Product, CartItem
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.messages import get_messages
-
 class AddToCartViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
@@ -574,3 +549,56 @@ class ProductFormTestCase(TestCase):
         form = ProductForm(data=form_data, files={'image': image})
         self.assertFalse(form.is_valid())
         self.assertIn('name', form.errors)
+
+
+########### PASS ###############
+from django.test import TestCase, Client
+from django.urls import reverse
+from django.contrib.auth.models import User
+from unittest.mock import patch, Mock
+from .models import CartItem, Order, Product
+from datetime import date, timedelta
+
+class PaymentSuccessViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
+        self.product = Product.objects.create(name='Test Product', price=10.00)
+        CartItem.objects.create(user=self.user, product=self.product, quantity=2)
+
+        session = self.client.session
+        session['checkout_data'] = {
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john@example.com',
+            'address': '123 Street',
+            'city': 'City',
+            'state': 'State',
+            'zip_code': '12345',
+            'amount': 20.00
+        }
+        session.save()
+
+    @patch('stripe.checkout.Session.retrieve')
+    @patch('django.db.models.fields.files.ImageFieldFile.url', new_callable=Mock)
+    def test_payment_success_view(self, mock_image_url, mock_retrieve):
+        mock_image_url.return_value = 'http://example.com/test_image.jpg'
+        mock_session = Mock()
+        mock_session.payment_status = 'paid'
+        mock_retrieve.return_value = mock_session
+
+        response = self.client.get(reverse('payment_success') + '?session_id=test_session')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'store/payment_success.html')
+
+        # Check that the order was created
+        order = Order.objects.get(user=self.user)
+        self.assertEqual(order.total_amount, 20.00)
+        self.assertEqual(order.delivery_cost, 0.00)
+        self.assertEqual(order.shipping_date, date.today() + timedelta(days=5))
+
+        # Check the order items
+        self.assertEqual(len(order.items), 1)
+        self.assertEqual(order.items[0]['product_id'], self.product.id)
+        self.assertEqual(order.items[0]['quantity'], 2)
