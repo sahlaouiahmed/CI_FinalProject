@@ -1,131 +1,308 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+# Kitchen Garden
 
-Welcome Ahmed Sahlaoui,
+Welcome to Kitchen Garden – your ultimate destination for all things gardening! Whether you're a seasoned green thumb or just starting your journey into the world of gardening, our platform is designed to cater to your needs with a wide range of gardening supplies and products.
 
-This is the Code Institute student template for Gitpod. We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+At Kitchen Garden, we believe that everyone deserves a slice of nature, no matter where they live. Our mission is to provide you with the best tools, seeds, and accessories to create your own lush, thriving garden, be it on a balcony, backyard, or a small windowsill. Our carefully curated selection of products ensures that you can cultivate your garden with ease and enjoyment.
 
-You can safely delete this README.md file or change it for your own project. Please do read it at least once, though! It contains some important information about Gitpod and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **June 18, 2024**
+Our user-friendly website allows you to browse through an extensive collection of high-quality products, add your favorite items to the cart, and seamlessly checkout with our secure payment system powered by Stripe. With detailed product descriptions, customer reviews, and expert gardening tips, we're here to support you every step of the way.
 
-## Gitpod Reminders
+Join our community of gardening enthusiasts and discover the joy of growing your own plants, herbs, and vegetables. At Kitchen Garden, we are committed to helping you bring the beauty of nature into your home.
 
-To run a frontend (HTML, CSS, Javascript only) application in Gitpod, in the terminal, type:
+Start your gardening adventure with us today and let your garden flourish with Kitchen Garden!
 
-`python3 -m http.server`
+## Table of Contents
 
-A blue button should appear to click: _Make Public_,
+- [Features](#features)
+- [Usage](#usage)
+- [Technologies](#TechnologiesUsed)
+- [UserStories](#UserStories)
+- [AppsOverview](#AppsOverview)
+- [ERD](#ERD)
 
-Another blue button should appear to click: _Open Browser_.
+## Features
 
-To run a backend Python file, type `python3 app.py` if your Python file is named `app.py`, of course.
+- User authentication and authorization
+- Product listing with search and filter capabilities
+- Shopping cart functionality
+- Order management
+- Checkout system with Stripe integration
+- **Educational Articles:** Access a variety of articles and resources designed especially for beginners. Learn about selecting the right plants, understanding soil types, essential gardening tools, and seasonal maintenance tips.
+- User-friendly interface
 
-A blue button should appear to click: _Make Public_,
+## Usage
 
-Another blue button should appear to click: _Open Browser_.
+Once the development server is running, you can access the application in your web browser at [KitchenGarden](https://ci-finalproject-93798f70d775.herokuapp.com/). From there, you can:
 
-By Default, Gitpod gives you superuser security privileges. Therefore, you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+- Browse products
+- Add products to your shopping cart
+- Proceed to checkout and complete orders
+- Manage your account and view order history
+- **Read Educational Articles:** New to gardening? Our platform offers a wealth of articles that cover everything you need to get started. From planting tips to seasonal advice, we've got you covered.
 
-To log into the Heroku toolbelt CLI:
+## Technologies Used
 
-1. Log in to your Heroku account and go to *Account Settings* in the menu under your avatar.
-2. Scroll down to the *API Key* and click *Reveal*
-3. Copy the key
-4. In Gitpod, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
+- Django: Backend framework
+- HTML/CSS: Frontend design
+- JavaScript: Frontend interactivity
+- Stripe: Payment processing
+- PostgreSQL: Database (for production)
+- Python: Programming language
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you, so do not share it. If you accidentally make it public, you can create a new one with _Regenerate API Key_.
+## User Stories
 
-### Connecting your Mongo database
+### Store App
 
-- **Connect to Mongo CLI on a IDE**
-- navigate to your MongoDB Clusters Sandbox
-- click **"Connect"** button
-- select **"Connect with the MongoDB shell"**
-- select **"I have the mongo shell installed"**
-- choose **mongosh (2.0 or later)** for : **"Select your mongo shell version"**
-- choose option: **"Run your connection string in your command line"**
-- in the terminal, paste the copied code `mongo "mongodb+srv://<CLUSTER-NAME>.mongodb.net/<DBname>" --apiVersion 1 --username <USERNAME>`
-  - replace all `<angle-bracket>` keys with your own data
-- enter password _(will not echo **\*\*\*\*** on screen)_
+- **As a user,** I want to browse a catalog of gardening products so that I can find items to purchase.
+- **As a user,** I want to search for specific products so that I can quickly locate the items I need.
+- **As a user,** I want to add products to my shopping cart so that I can purchase multiple items in one order.
+- **As a user,** I want to view the items in my shopping cart so that I can review my selections before checkout.
+- **As a user,** I want to update the quantity of items in my shopping cart so that I can purchase the correct amount.
+- **As a user,** I want to remove items from my shopping cart so that I can adjust my order.
+- **As a user,** I want to proceed to checkout and provide my shipping information so that I can complete my purchase.
+- **As a user,** I want to securely pay for my order using Stripe so that I can complete my purchase with confidence.
 
-------
+### Reviews App
 
-## Release History
+- **As a user,** I want to read reviews for products so that I can make informed purchasing decisions.
+- **As a user,** I want to leave a review for a product I purchased so that I can share my experience with others.
+- **As a user,** I want to rate products I have purchased so that I can provide feedback to the store.
+- **As a user,** I want to see the average rating for a product so that I can quickly gauge its quality.
 
-We continually tweak and adjust this template to help give you the best experience. Here is the version history:
+### Articles App
 
-**June 18, 2024,** Add Mongo back into template
+- **As a user,** I want to read articles about gardening so that I can learn more about different gardening techniques and tips.
+- **As a user,** I want to filter articles based on categories so that I can find information relevant to my interests.
+- **As a user,** I want to search for specific articles so that I can quickly find the information I need.
+- **As a user,** I want to comment on articles so that I can engage with the community and share my thoughts.
+- **As a user,** I want to like articles that I found helpful so that I can show my appreciation and support the authors.
 
-**June 14, 2024,** Temporarily remove Mongo until the key issue is resolved
+## User Stories
 
-**May 28 2024:** Fix Mongo and Links installs
+### Store App
 
-**April 26 2024:** Update node version to 16
+- **As a user,** I want to browse a catalog of gardening products so that I can find items to purchase.
+- **As a registered user,** I want to add products to my shopping cart so that I can purchase multiple items in one order.
+- **As a registered user,** I want to view the items in my shopping cart so that I can review my selections before checkout.
+- **As a registered user,** I want to proceed to checkout and provide my shipping information so that I can complete my purchase.
+- **As a registered user,** I want to securely pay for my order using Stripe so that I can complete my purchase with confidence.
 
-**September 20 2023:** Update Python version to 3.9.17.
+### Reviews App
 
-**September 1 2021:** Remove `PGHOSTADDR` environment variable.
+- **As a user,** I want to read reviews about the website and services so that I can make informed decisions about using the platform.
+- **As a registered user,** I want to leave a review about my experience with the website and services so that I can share feedback with others.
+- **As a registered user,** I want to rate the website and services so that I can provide feedback to help improve the platform.
 
-**July 19 2021:** Remove `font_fix` script now that the terminal font issue is fixed.
+### Articles App
 
-**July 2 2021:** Remove extensions that are not available in Open VSX.
+- **As a user,** I want to read articles about gardening so that I can learn more about different gardening techniques and tips.
+- **As a user,** I want to search for specific articles so that I can quickly find the information I need.
 
-**June 30 2021:** Combined the P4 and P5 templates into one file, added the uptime script. See the FAQ at the end of this file.
+### Account Management
 
-**June 10 2021:** Added: `font_fix` script and alias to fix the Terminal font issue
+- **As a user,** I want to create an account so that I can manage my orders and preferences.
+- **As a registred user,** I want to log in to my account so that I can access my personal dashboard and order history.
+- **As a registred user,** I want to reset my password if I forget it so that I can regain access to my account.
 
-**May 10 2021:** Added `heroku_config` script to allow Heroku API key to be stored as an environment variable.
+### Website Functionalities
 
-**April 7 2021:** Upgraded the template for VS Code instead of Theia.
+- **As a user,** I can browse and search for gardening products.
+- **As a registred user,** I can add products to my shopping cart and review them before checkout.
+- **As a registred user,** I can securely complete my purchase using Stripe.
+- **As a registered user,** I can read and leave reviews about the website and services.
+- **As a user,** I can read articles on various gardening topics.
+- **As a registred user,** I can manage my account and view my order history.
 
-**October 21 2020:** Versions of the HTMLHint, Prettier, Bootstrap4 CDN and Auto Close extensions updated. The Python extension needs to stay the same version for now.
+## Apps Overview
 
-**October 08 2020:** Additional large Gitpod files (`core.mongo*` and `core.python*`) are now hidden in the Explorer, and have been added to the `.gitignore` by default.
+### Core App
 
-**September 22 2020:** Gitpod occasionally creates large `core.Microsoft` files. These are now hidden in the Explorer. A `.gitignore` file has been created to make sure these files will not be committed, along with other common files.
+The Core app serves as the backbone of the project, handling essential functionalities such as the home page, contact page, and subscription management. This app ensures that users can navigate the main sections of the website, get in touch through the contact page, and subscribe to newsletters and updates.
 
-**April 16 2020:** The template now automatically installs MySQL instead of relying on the Gitpod MySQL image. The message about a Python linter not being installed has been dealt with, and the set-up files are now hidden in the Gitpod file explorer.
+**Key Features:**
+- Home page management with essential information and navigation links.
+- Contact page for users to reach out with inquiries or feedback.
+- Subscription functionality to allow users to sign up for newsletters and updates.
 
-**April 13 2020:** Added the _Prettier_ code beautifier extension instead of the code formatter built-in to Gitpod.
+### Store App
 
-**February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
+The Store app is the heart of the Kitchen Garden project, offering a comprehensive catalog of gardening products. Users can browse, search, and filter products, add items to their shopping cart, and proceed to a secure checkout using Stripe. The app also includes features for order management and tracking.
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
+**Key Features:**
+- Product catalog with search and filter capabilities.
+- Shopping cart functionality.
+- Secure checkout with Stripe integration.
+- Order management and tracking.
 
-------
+### Articles App
 
-## FAQ about the uptime script
+The Articles app provides a wealth of information on various gardening topics. Users can access educational articles, search for specific topics, and filter content based on their interests. This app aims to support users in their gardening journey by offering expert tips and advice.
 
-**Why have you added this script?**
+**Key Features:**
+- Access to a library of gardening articles.
+- Search and filter functionality for articles.
+- Educational content aimed at beginners and experienced gardeners alike.
 
-It will help us to calculate how many running workspaces there are at any one time, which greatly helps us with cost and capacity planning. It will help us decide on the future direction of our cloud-based IDE strategy.
+### Reviews App
 
-**How will this affect me?**
+The Reviews app enables users to leave feedback about their experiences with the website and services. Users can share their thoughts, rate the overall service, and help others make informed decisions. This app focuses on collecting valuable user input to continually improve the platform and ensure customer satisfaction.
 
-For everyday usage of Gitpod, it doesn’t have any effect at all. The script only captures the following data:
+**Key Features:**
+- Users can read and write reviews about the website and services.
+- Star rating system to provide quantitative feedback.
+- Moderation tools to ensure the quality and relevance of reviews.
 
-- An ID that is randomly generated each time the workspace is started.
-- The current date and time
-- The workspace status of “started” or “running”, which is sent every 5 minutes.
+## ERD
 
-It is not possible for us or anyone else to trace the random ID back to an individual, and no personal data is being captured. It will not slow down the workspace or affect your work.
+### Article Model
 
-**So….?**
+**Entity:** `Article`
+- **Attributes:**
+  - `id` (Primary Key)
+  - `title`: `CharField` (max_length=200)
+  - `content`: `TextField`
+  - `image`: `ImageField` (upload_to='static/images/articles')
+  - `published_date`: `DateTimeField` (default=timezone.now)
+  - `updated_date`: `DateTimeField` (auto_now=True)
 
-We want to tell you this so that we are being completely transparent about the data we collect and what we do with it.
-
-**Can I opt out?**
-
-Yes, you can. Since no personally identifiable information is being captured, we'd appreciate it if you let the script run; however if you are unhappy with the idea, simply run the following commands from the terminal window after creating the workspace, and this will remove the uptime script:
-
+```plaintext
++-----------------+
+|     Article     |
++-----------------+
+| id (PK)         |
+| title           |
+| content         |
+| image           |
+| published_date  |
+| updated_date    |
++-----------------+
 ```
-pkill uptime.sh
-rm .vscode/uptime.sh
+
+### Profile Model
+
+**Entity:** `Profile`
+- **Attributes:**
+  - `id` (Primary Key)
+  - `user`: `OneToOneField` (User, on_delete=models.CASCADE)
+  - `is_subscribed`: `BooleanField` (default=True)
+
+```plaintext
++-----------------+
+|     Profile     |
++-----------------+
+| id (PK)         |
+| user            |
+| is_subscribed   |
++-----------------+
 ```
 
-**Anything more?**
 
-Yes! We'd strongly encourage you to look at the source code of the `uptime.sh` file so that you know what it's doing. As future software developers, it will be great practice to see how these shell scripts work.
+### Product Model
 
----
+**Entity:** `Product`
+- **Attributes:**
+  - `id` (Primary Key)
+  - `name`: `CharField` (max_length=255)
+  - `description`: `TextField`
+  - `price`: `DecimalField` (max_digits=10, decimal_places=2)
+  - `image`: `ImageField` (upload_to='static/images/products')
+  - `category`: `CharField` (max_length=50, choices=CATEGORY_CHOICES)
+  - `stock`: `PositiveIntegerField` (default=0)
+  - `created_at`: `DateTimeField` (auto_now_add=True)
+  - `updated_at`: `DateTimeField` (auto_now=True)
 
-Happy coding!
+```plaintext
++-----------------+
+|     Product     |
++-----------------+
+| id (PK)         |
+| name            |
+| description     |
+| price           |
+| image           |
+| category        |
+| stock           |
+| created_at      |
+| updated_at      |
++-----------------+
+```
+
+
+### CartItem Model
+
+**Entity:** `CartItem`
+- **Attributes:**
+  - `id` (Primary Key)
+  - `user`: `ForeignKey` (User, on_delete=models.CASCADE)
+  - `product`: `ForeignKey` (Product, on_delete=models.CASCADE)
+  - `quantity`: `PositiveIntegerField` (default=1)
+
+```plaintext
++-----------------+
+|    CartItem     |
++-----------------+
+| id (PK)         |
+| user            |
+| product         |
+| quantity        |
++-----------------+
+```
+
+
+### Order Model
+
+**Entity:** `Order`
+- **Attributes:**
+  - `id` (Primary Key)
+  - `user`: `ForeignKey` (User, on_delete=models.CASCADE)
+  - `first_name`: `CharField` (max_length=100)
+  - `last_name`: `CharField` (max_length=100)
+  - `email`: `EmailField`
+  - `address`: `CharField` (max_length=255)
+  - `city`: `CharField` (max_length=100)
+  - `state`: `CharField` (max_length=100)
+  - `zip_code`: `CharField` (max_length=10)
+  - `items`: `JSONField` (default=dict)
+  - `total_amount`: `DecimalField` (max_digits=10, decimal_places=2, default=0.0)
+  - `created_at`: `DateTimeField` (auto_now_add=True)
+
+```plaintext
++-----------------+
+|      Order      |
++-----------------+
+| id (PK)         |
+| user            |
+| first_name      |
+| last_name       |
+| email           |
+| address         |
+| city            |
+| state           |
+| zip_code        |
+| items           |
+| total_amount    |
+| created_at      |
++-----------------+
+```
+
+
+### Review Model
+
+**Entity:** `Review`
+- **Attributes:**
+  - `id` (Primary Key)
+  - `user`: `ForeignKey` (User, on_delete=models.CASCADE)
+  - `rating`: `IntegerField` (choices=[(i, i) for i in range(1, 6)])  # Rating from 1 to 5
+  - `comment`: `TextField`
+  - `created_at`: `DateTimeField` (auto_now_add=True)
+
+```plaintext
++-----------------+
+|     Review      |
++-----------------+
+| id (PK)         |
+| user            |
+| rating          |
+| comment         |
+| created_at      |
++-----------------+
+```
