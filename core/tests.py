@@ -2,6 +2,39 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from reviews.models import Review
+from .models import Profile
+
+######### PASS ############
+class ProfileModelTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.profile, created = Profile.objects.get_or_create(user=self.user)
+
+    def test_profile_creation(self):
+        profile = Profile.objects.get(id=self.profile.id)
+        self.assertEqual(profile.user.username, 'testuser')
+        self.assertTrue(profile.is_subscribed)
+
+    def test_profile_str(self):
+        profile = Profile.objects.get(id=self.profile.id)
+        self.assertEqual(str(profile), 'testuser Profile')
+
+    def test_profile_default_values(self):
+        profile = Profile.objects.get(id=self.profile.id)
+        self.assertTrue(profile.is_subscribed)
+
+    def test_profile_update(self):
+        self.profile.is_subscribed = False
+        self.profile.save()
+        profile = Profile.objects.get(id=self.profile.id)
+        self.assertFalse(profile.is_subscribed)
+
+    def test_profile_delete(self):
+        self.profile.delete()
+        with self.assertRaises(Profile.DoesNotExist):
+            Profile.objects.get(id=self.profile.id)
+
 
 
 ############## PASS ################

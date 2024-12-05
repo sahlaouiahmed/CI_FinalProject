@@ -7,7 +7,141 @@ from .forms import ShippingForm, ProductForm
 from django.conf import settings
 from unittest.mock import patch
 from django.contrib.messages import get_messages
+from decimal import Decimal
+from django.utils import timezone
 
+########## PASS ##############
+class ProductModelTest(TestCase):
+
+    def setUp(self):
+        self.product = Product.objects.create(
+            name="Test Product",
+            description="This is a test product.",
+            price=Decimal('9.99'),
+            image="static/images/products/test.jpg",
+            category="seed",
+            stock=10
+        )
+
+    def test_product_creation(self):
+        product = Product.objects.get(id=self.product.id)
+        self.assertEqual(product.name, "Test Product")
+        self.assertEqual(product.description, "This is a test product.")
+        self.assertEqual(product.price, Decimal('9.99'))
+        self.assertEqual(product.image, "static/images/products/test.jpg")
+        self.assertEqual(product.category, "seed")
+        self.assertEqual(product.stock, 10)
+
+    def test_product_str(self):
+        product = Product.objects.get(id=self.product.id)
+        self.assertEqual(str(product), "Test Product")
+
+    def test_product_default_values(self):
+        product = Product.objects.get(id=self.product.id)
+        self.assertEqual(product.stock, 10)
+        self.assertIsInstance(product.created_at, timezone.datetime)
+        self.assertIsInstance(product.updated_at, timezone.datetime)
+
+    def test_product_update(self):
+        self.product.name = "Updated Product"
+        self.product.price = Decimal('19.99')
+        self.product.save()
+        product = Product.objects.get(id=self.product.id)
+        self.assertEqual(product.name, "Updated Product")
+        self.assertEqual(product.price, Decimal('19.99'))
+
+    def test_product_delete(self):
+        self.product.delete()
+        with self.assertRaises(Product.DoesNotExist):
+            Product.objects.get(id=self.product.id)
+
+
+############ PASS #############
+class CartItemModelTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.product = Product.objects.create(
+            name="Test Product",
+            description="This is a test product.",
+            price=Decimal('9.99'),
+            image="static/images/products/test.jpg",
+            category="seed",
+            stock=10
+        )
+        self.cart_item = CartItem.objects.create(
+            user=self.user,
+            product=self.product,
+            quantity=1
+        )
+
+    def test_cart_item_creation(self):
+        cart_item = CartItem.objects.get(id=self.cart_item.id)
+        self.assertEqual(cart_item.user.username, 'testuser')
+        self.assertEqual(cart_item.product.name, 'Test Product')
+        self.assertEqual(cart_item.quantity, 1)
+
+    def test_cart_item_str(self):
+        cart_item = CartItem.objects.get(id=self.cart_item.id)
+        self.assertEqual(str(cart_item), 'Test Product (1)')
+
+    def test_cart_item_update(self):
+        self.cart_item.quantity = 5
+        self.cart_item.save()
+        cart_item = CartItem.objects.get(id=self.cart_item.id)
+        self.assertEqual(cart_item.quantity, 5)
+
+    def test_cart_item_delete(self):
+        self.cart_item.delete()
+        with self.assertRaises(CartItem.DoesNotExist):
+            CartItem.objects.get(id=self.cart_item.id)
+
+
+########## PASS ############
+class OrderModelTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.order = Order.objects.create(
+            user=self.user,
+            first_name="John",
+            last_name="Doe",
+            email="johndoe@example.com",
+            address="123 Main St",
+            city="Anytown",
+            state="CA",
+            zip_code="12345",
+            items={"product1": 2, "product2": 1},
+            total_amount=Decimal('29.99')
+        )
+
+    def test_order_creation(self):
+        order = Order.objects.get(id=self.order.id)
+        self.assertEqual(order.user.username, 'testuser')
+        self.assertEqual(order.first_name, "John")
+        self.assertEqual(order.last_name, "Doe")
+        self.assertEqual(order.email, "johndoe@example.com")
+        self.assertEqual(order.address, "123 Main St")
+        self.assertEqual(order.city, "Anytown")
+        self.assertEqual(order.state, "CA")
+        self.assertEqual(order.zip_code, "12345")
+        self.assertEqual(order.items, {"product1": 2, "product2": 1})
+        self.assertEqual(order.total_amount, Decimal('29.99'))
+
+    def test_order_str(self):
+        order = Order.objects.get(id=self.order.id)
+        self.assertEqual(str(order), f"Order {self.order.id} by testuser")
+
+    def test_order_update(self):
+        self.order.total_amount = Decimal('39.99')
+        self.order.save()
+        order = Order.objects.get(id=self.order.id)
+        self.assertEqual(order.total_amount, Decimal('39.99'))
+
+    def test_order_delete(self):
+        self.order.delete()
+        with self.assertRaises(Order.DoesNotExist):
+            Order.objects.get(id=self.order.id)
 
 ########### PASS #############
 class ProductListViewTestCase(TestCase):

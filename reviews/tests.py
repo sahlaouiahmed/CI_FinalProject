@@ -5,6 +5,54 @@ from .models import Review
 from django.contrib.messages import get_messages
 from datetime import datetime
 from .forms import ReviewForm
+from django.utils import timezone
+
+########## PASS ############
+class ReviewModelTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='password123')
+        self.review = Review.objects.create(
+            user=self.user,
+            rating=5,
+            comment="This is a test review.",
+            created_at=timezone.now()
+        )
+
+    def test_review_creation(self):
+        review = Review.objects.get(id=self.review.id)
+        self.assertEqual(review.user.username, 'testuser')
+        self.assertEqual(review.rating, 5)
+        self.assertEqual(review.comment, "This is a test review.")
+        self.assertIsInstance(review.created_at, timezone.datetime)
+
+    def test_review_str(self):
+        review = Review.objects.get(id=self.review.id)
+        self.assertEqual(str(review), 'Review by testuser - Rating: 5')
+
+    def test_review_rating_choices(self):
+        for i in range(1, 6):
+            review = Review.objects.create(
+                user=self.user,
+                rating=i,
+                comment=f"Rating {i} test review.",
+                created_at=timezone.now()
+            )
+            self.assertIn(review.rating, [1, 2, 3, 4, 5])
+
+    def test_review_update(self):
+        self.review.rating = 3
+        self.review.comment = "Updated review comment."
+        self.review.save()
+        review = Review.objects.get(id=self.review.id)
+        self.assertEqual(review.rating, 3)
+        self.assertEqual(review.comment, "Updated review comment.")
+
+    def test_review_delete(self):
+        self.review.delete()
+        with self.assertRaises(Review.DoesNotExist):
+            Review.objects.get(id=self.review.id)
+
 
 ########## PASS ############
 class SubmitReviewViewTestCase(TestCase):

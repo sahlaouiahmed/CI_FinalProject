@@ -7,7 +7,47 @@ from django.contrib.messages import get_messages
 from articles.forms import ArticleForm
 from .models import Article
 import os
+from django.utils import timezone
 
+############## PASS ############
+class ArticleModelTest(TestCase):
+
+    def setUp(self):
+        self.article = Article.objects.create(
+            title="Test Article",
+            content="This is a test article.",
+            image="static/images/articles/test.jpg",
+            published_date=timezone.now(),
+            updated_date=timezone.now()
+        )
+
+    def test_article_creation(self):
+        article = Article.objects.get(id=self.article.id)
+        self.assertEqual(article.title, "Test Article")
+        self.assertEqual(article.content, "This is a test article.")
+        self.assertEqual(article.image, "static/images/articles/test.jpg")
+        self.assertEqual(str(article), "Test Article")
+
+    def test_article_str(self):
+        article = Article.objects.get(id=self.article.id)
+        self.assertEqual(str(article), article.title)
+
+    def test_article_default_values(self):
+        article = Article.objects.get(id=self.article.id)
+        self.assertIsInstance(article.published_date, timezone.datetime)
+        self.assertIsInstance(article.updated_date, timezone.datetime)
+
+    def test_article_update(self):
+        self.article.title = "Updated Article"
+        self.article.save()
+        article = Article.objects.get(id=self.article.id)
+        self.assertEqual(article.title, "Updated Article")
+        self.assertNotEqual(article.updated_date, article.published_date)
+
+    def test_article_delete(self):
+        self.article.delete()
+        with self.assertRaises(Article.DoesNotExist):
+            Article.objects.get(id=self.article.id)
 
 
 ############## PASS ###############
