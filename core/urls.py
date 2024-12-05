@@ -9,4 +9,5 @@ urlpatterns = [
     path('reviews/submit/', submit_review, name='submit_review'),
     path('reviews/view/', view_reviews, name='view_reviews'), 
     path('subscribe/', views.subscribe, name='subscribe'),
+    
 ]
