@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, CartItem, Order
 from django.contrib import messages
 from django.core.mail import send_mail
-from .forms import ShippingForm
+from .forms import ShippingForm , ProductForm
 import stripe
 from django.conf import settings
 from datetime import datetime, timedelta
-
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseForbidden
 
 def product_list(request):
     query = request.GET.get('q', '')
@@ -230,10 +231,6 @@ def order_list(request):
     return render(request, 'store/order_list.html', {'orders': orders})
 
 
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Order, Product
-
 @login_required
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
@@ -250,13 +247,6 @@ def order_detail(request, order_id):
 
 
 #SUPERUSER 
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.http import HttpResponseForbidden
-from .forms import ProductForm
-from .models import Product
-
 def superuser_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
         if not request.user.is_superuser:

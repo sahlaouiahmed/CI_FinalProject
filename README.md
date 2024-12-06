@@ -484,6 +484,9 @@ This project is deployed to Heroku using the GitHub integration. We follow the s
      )
      ```
 
+     Note on Static Files Storage:
+          For this project, we have utilized Amazon Web Services (AWS) S3 to store our static files. This setup helps to efficiently manage and serve static content, enhancing the performance and scalability of the application. The configuration for AWS S3 is included in the settings.py file, ensuring seamless integration and management of static assets.
+
 6. **Push to GitHub**:
    - Ensure all changes are committed to the GitHub repository.
 
