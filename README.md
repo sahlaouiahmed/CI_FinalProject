@@ -10,7 +10,7 @@ Join our community of gardening enthusiasts and discover the joy of growing your
 
 Start your gardening adventure with us today and let your garden flourish with Kitchen Garden!
 
-You can access the Kitchen Garden website by clicking [here](https://dashboard.heroku.com/apps/ci-finalproject/settings).
+You can access the Kitchen Garden website by clicking [here](https://ci-finalproject-93798f70d775.herokuapp.com/).
 
 
 ## Table of Contents
