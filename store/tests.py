@@ -410,7 +410,7 @@ from .models import Product, CartItem
 from django.core.files.uploadedfile import SimpleUploadedFile
 from .forms import ShippingForm
 from django.conf import settings
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 class CheckoutViewTestCase(TestCase):
     def setUp(self):
@@ -434,8 +434,14 @@ class CheckoutViewTestCase(TestCase):
 
     @patch('stripe.checkout.Session.create')
     def test_checkout_success(self, mock_stripe_session_create):
-        mock_stripe_session_create.return_value.id = 'test_session_id'
-        mock_stripe_session_create.return_value.url = 'https://example.com/checkout-session'
+        mock_session = Mock()
+        mock_session.id = 'test_session_id'
+        mock_session.url = 'https://example.com/checkout-session'
+        mock_stripe_session_create.return_value = mock_session
+
+        # Fetch CSRF token
+        response = self.client.get(reverse('checkout'))
+        csrf_token = self.client.cookies['csrftoken'].value
 
         form_data = {
             'first_name': 'John',
@@ -444,19 +450,19 @@ class CheckoutViewTestCase(TestCase):
             'address': '123 Main St',
             'city': 'New York',
             'state': 'NY',
-            'zip_code': '10001'
+            'zip_code': '10001',
+            'csrfmiddlewaretoken': csrf_token
         }
 
-        response = self.client.post(reverse('checkout'), data=form_data, follow=True)
+        response = self.client.post(reverse('checkout'), data=form_data, format='multipart', follow=True)
 
         if response.status_code == 400:
-            print("Form errors:")
+            # Print form errors for debugging
             form = ShippingForm(data=form_data)
-            if not form.is_valid():
-                print(form.errors)
-            print(response.content.decode())
+            print("Form errors:", form.errors)
+            print("Response content:", response.content.decode())
 
-        self.assertRedirects(response, 'https://example.com/checkout-session')
+        self.assertEqual(response.status_code, 302)  # Expecting a redirect to the checkout session
 
         # Verify that the session data is stored correctly
         session_data = self.client.session['checkout_data']
@@ -469,13 +475,14 @@ class CheckoutViewTestCase(TestCase):
         self.assertEqual(session_data['zip_code'], '10001')
         self.assertEqual(session_data['amount'], 20.00)  # 2 items at $10 each
 
+        self.assertRedirects(response, 'https://example.com/checkout-session')
+
     def test_checkout_get(self):
         response = self.client.get(reverse('checkout'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'store/checkout.html')
         self.assertIsInstance(response.context['form'], ShippingForm)
         self.assertContains(response, settings.STRIPE_PUBLIC_KEY)
-
 
 
 ########## PASS ##########
@@ -602,3 +609,4 @@ class PaymentSuccessViewTest(TestCase):
         self.assertEqual(len(order.items), 1)
         self.assertEqual(order.items[0]['product_id'], self.product.id)
         self.assertEqual(order.items[0]['quantity'], 2)
+

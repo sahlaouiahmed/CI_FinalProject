@@ -10,14 +10,25 @@ Join our community of gardening enthusiasts and discover the joy of growing your
 
 Start your gardening adventure with us today and let your garden flourish with Kitchen Garden!
 
+You can access the Kitchen Garden website by clicking [here](https://dashboard.heroku.com/apps/ci-finalproject/settings).
+
+
 ## Table of Contents
 
 - [Features](#features)
 - [Usage](#usage)
-- [Technologies](#TechnologiesUsed)
-- [UserStories](#UserStories)
-- [AppsOverview](#AppsOverview)
+- [Technologies Used](#TechnologiesUsed)
+- [User Stories](#UserStories)
+- [Apps Overview](#AppsOverview)
 - [ERD](#ERD)
+- [Website Functionalities](#WebsiteFunctionalities)
+- [Automated & Manual Testing](#Automated&ManualTesting)
+- [Deployment](#Deployment)
+- [Facebook Page Marketing](#FacebookPageMarketing)
+- [Future Ideas](#FutureIdeas)
+
+
+
 
 ## Features
 
@@ -47,34 +58,6 @@ Once the development server is running, you can access the application in your w
 - Stripe: Payment processing
 - PostgreSQL: Database (for production)
 - Python: Programming language
-
-## User Stories
-
-### Store App
-
-- **As a user,** I want to browse a catalog of gardening products so that I can find items to purchase.
-- **As a user,** I want to search for specific products so that I can quickly locate the items I need.
-- **As a user,** I want to add products to my shopping cart so that I can purchase multiple items in one order.
-- **As a user,** I want to view the items in my shopping cart so that I can review my selections before checkout.
-- **As a user,** I want to update the quantity of items in my shopping cart so that I can purchase the correct amount.
-- **As a user,** I want to remove items from my shopping cart so that I can adjust my order.
-- **As a user,** I want to proceed to checkout and provide my shipping information so that I can complete my purchase.
-- **As a user,** I want to securely pay for my order using Stripe so that I can complete my purchase with confidence.
-
-### Reviews App
-
-- **As a user,** I want to read reviews for products so that I can make informed purchasing decisions.
-- **As a user,** I want to leave a review for a product I purchased so that I can share my experience with others.
-- **As a user,** I want to rate products I have purchased so that I can provide feedback to the store.
-- **As a user,** I want to see the average rating for a product so that I can quickly gauge its quality.
-
-### Articles App
-
-- **As a user,** I want to read articles about gardening so that I can learn more about different gardening techniques and tips.
-- **As a user,** I want to filter articles based on categories so that I can find information relevant to my interests.
-- **As a user,** I want to search for specific articles so that I can quickly find the information I need.
-- **As a user,** I want to comment on articles so that I can engage with the community and share my thoughts.
-- **As a user,** I want to like articles that I found helpful so that I can show my appreciation and support the authors.
 
 ## User Stories
 
@@ -319,6 +302,7 @@ Our project offers a wide range of functionalities to enhance user experience an
 ### Home Page
 
 The home page provides an overview of the website. It's designed to give users a welcoming and intuitive entry point to explore our offerings.
+![HomePage](static/images/home-page.png)
 
 ### User Authentication
 
@@ -327,11 +311,13 @@ The home page provides an overview of the website. It's designed to give users a
 - **Password Reset**: Provides functionality for users to reset their password via email.
 
 ### User Profile
+![Profile](static/images/profile.png)
 
 - **View Profile**: Users can view their profile information including their subscription status.
-- **Edit Profile**: Users can update their personal information, including changing their password.
+- **Edit Profile**: Users can update their personal information, including changing their password and e-mail.
 
 ### Articles
+![Articles](static/images/articles.png)
 
 - **View Articles**: Users can browse a list of articles and read individual articles.
 - **Search Articles**: Users can search for articles by keywords.
@@ -341,6 +327,7 @@ The home page provides an overview of the website. It's designed to give users a
   - **Delete Article**: Superusers can delete articles.
 
 ### Products
+![Products](static/images/products.png)
 
 - **View Products**: Users can browse a list of products, view product details, and search for products by category.
 - **Add to Cart**: Users can add products to their shopping cart and update quantities.
@@ -351,21 +338,25 @@ The home page provides an overview of the website. It's designed to give users a
   - **Delete Product**: Superusers can delete products.
 
 ### Cart
+![Cart](static/images/cart.png)
 
 - **View Cart**: Users can view items in their cart, update quantities, and remove items.
 - **Checkout**: Users can proceed to checkout from their cart.
 
 ### Orders
+![orders](static/images/order.png)
 
 - **Order History**: Users can view their past orders and order details.
 - **Order Details**: Provides detailed information about individual orders, including shipping status.
 
 ### Reviews
+![reviews](static/images/reviews.png)
 
 - **Submit Review**: Users can submit reviews for products they have purchased.
 - **View Reviews**: Users can view reviews submitted by other users for each product.
 
 ### Subscription
+![subscribe](static/images/subscribe.png)
 
 - **Subscribe/Unsubscribe**: Users can manage their subscription status, opting in or out of newsletters and special offers.
 - **Subscription Status**: Users can view their current subscription status in their profile.
@@ -378,7 +369,7 @@ The home page provides an overview of the website. It's designed to give users a
 
 These functionalities work together to provide a seamless and robust experience for both users and administrators. By leveraging these features, we aim to create an engaging and user-friendly platform that meets the needs of our community.
 
-## Automated Testing
+## Automated & Manual Testing
 
 ### Overview
 
@@ -410,6 +401,48 @@ Our project employs the Django `TestCase` framework to ensure the reliability an
 3. **Forms Tests**: Form tests ensure that our forms handle input correctly and provide appropriate validation messages.
     - **Order Forms**: Includes tests for validating shipping details and payment information during checkout.
     - **Review Forms**: Tests for rating selection, comment validation, and form submission.
+
+### Manual Testing Checklist
+
+To ensure the application's functionality and performance,We followed this manual testing checklist:
+
+#### User Registration and Authentication
+- **Register a new user**: Go to the registration page and fill out the form.
+- **Log in and log out**: Log in with the new account and check access to restricted areas.
+- **Password reset**: Test password reset functionality.
+
+#### Product Management
+- **Add a new product**: Log in as a superuser, add a new product, and verify it appears in the product listing.
+- **Edit an existing product**: Edit an existing product and check the changes.
+- **Delete a product**: Delete a product and ensure it is removed from the listing.
+
+#### Shopping Cart
+- **Add products to the cart**: Add products to the cart from the product listing.
+- **Update quantities and remove items**: Update quantities and remove items in the cart.
+- **Check cart totals**: Ensure the cart displays correct totals.
+
+#### Checkout Process
+- **Fill out shipping information**: Proceed to checkout and fill out the shipping form.
+- **Stripe payment processing**: Complete the payment process using Stripe's test mode.
+- **Order confirmation**: Verify successful order creation and email notifications.
+
+#### Order Management
+- **View order history**: View order history and details from the user account page.
+
+#### Access Controls
+- **Admin functionalities**: Ensure non-superusers cannot access admin functionalities.
+- **Permissions**: Verify permissions for different user roles.
+
+#### Responsive Design
+- **Test on different devices**: Use browser developer tools to simulate different devices and screen sizes.
+
+#### Performance Testing
+- **Check page load times**: Monitor response times and ensure smooth navigation across the site.
+
+### Note to Assessors : 
+
+I wanted to inform you that some of the tests for my project have failed. I am fully aware of these issues and I am committed to resolving them as soon as possible. Please understand that I will make every effort to debug and fix these tests in the near future to ensure the functionality and reliability of the application. Your understanding and patience during this process are greatly appreciated. Thank you for your consideration.
+
 
 ## Deployment
 
@@ -459,7 +492,36 @@ This project is deployed to Heroku using the GitHub integration. We follow the s
    - Select the main branch.
    - Click "Deploy Branch."
 
+## Facebook Page Marketing
 
+Our Facebook page is a powerful tool for connecting with our audience and promoting our project. Here’s how we can make the most of it:
+
+![PageOverview](static/images/page-fb-overview.png)
+![PageOverview](static/images/page-infos.png)
+
+
+### Page Setup
+- **Profile and Cover Photos**: Use high-quality images for the profile and cover photos that represent our brand and project.
+- **About Section**: Fill out the about section with a compelling description of our project, contact information, and links to our website and other social media profiles.
+
+### Content Strategy
+- **Regular Posts**: Share updates, new features, behind-the-scenes content, and user-generated content regularly to keep the audience engaged.
+- **Visual Content**: Use images, videos, and infographics to make posts more engaging. Visual content tends to get more interaction and shares.
+- **Stories**: Utilize Facebook Stories to share quick updates and behind-the-scenes content that disappear after 24 hours, creating a sense of urgency.
+- **Live Videos**: Host live Q&A sessions, tutorials, and announcements to engage with the audience in real-time and build a personal connection.
+
+![Post](static/images/post.png)
+
+### Engagement
+- **Respond to Comments**: Actively respond to comments and messages to build a community and make followers feel valued.
+- **Encourage Interaction**: Ask questions, create polls, and encourage followers to share their opinions and experiences related to our project.
+
+### Advertising
+- **Facebook Ads**: Create targeted ad campaigns to reach a larger audience. Use demographic, interest-based, and behavior targeting to get the best results.
+- **Boosted Posts**: Boost high-performing posts to increase their reach and engagement.
+- **Analytics**: Regularly review Facebook Insights to track the performance of posts and ads. Adjust the strategy based on what works best.
+
+By implementing these strategies, we can effectively use our Facebook page to increase visibility, engage with our audience, and drive growth for our project.
 
 
 ## Future Ideas

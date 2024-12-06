@@ -219,7 +219,6 @@ def payment_success(request):
     return redirect('checkout')
 
 
-
 @login_required
 def payment_cancel(request):
     # Render the cancel page
@@ -251,15 +250,20 @@ def order_detail(request, order_id):
 
 
 #SUPERUSER 
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
-from .models import Product
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import HttpResponseForbidden
 from .forms import ProductForm
+from .models import Product
 
 def superuser_required(view_func):
-    decorated_view_func = user_passes_test(lambda u: u.is_superuser)(view_func)
-    return decorated_view_func
+    def _wrapped_view_func(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return HttpResponseForbidden()
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view_func
+
 
 @superuser_required
 def add_product(request):
@@ -272,6 +276,8 @@ def add_product(request):
     else:
         form = ProductForm()
     return render(request, 'store/add_product.html', {'form': form})
+
+
 
 @superuser_required
 def edit_product(request, pk):

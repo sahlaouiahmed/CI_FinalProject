@@ -57,6 +57,7 @@ def edit_article(request, pk):
         form = ArticleForm(instance=article)
     return render(request, 'articles/edit_article.html', {'form': form, 'article': article})
 
+
 @superuser_required
 def delete_article(request, pk):
     article = get_object_or_404(Article, pk=pk)
